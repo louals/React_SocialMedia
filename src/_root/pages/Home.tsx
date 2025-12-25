@@ -98,7 +98,7 @@ const Home = () => {
             </div>
             
             <div className="pt-2 text-[10px]">
-              © {new Date().getFullYear()} Snapgram
+              © {new Date().getFullYear()} Share and save
             </div>
           </div>
         </div>

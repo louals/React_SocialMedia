@@ -147,8 +147,8 @@ const UserCard = ({
           <Button 
             className={`${variantConfig[variant].button} ${
               isFollowingUser 
-                ? "bg-dark-4 hover:bg-dark-3 text-light-1" 
-                : "bg-primary-500 hover:bg-primary-600 text-light-1"
+                ? "bg-dark-4 hover:bg-dark-3 text-light-1 rounded-xl" 
+                : "bg-primary-500 hover:bg-primary-600 text-dark-1 rounded-xl"
             }`}
             onClick={isFollowingUser ? handleUnfollow : handleFollow}
             disabled={isLoading}

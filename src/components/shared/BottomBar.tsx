@@ -9,21 +9,21 @@ const BottomBar = () => {
         const isActive = pathname === link.route;
         return (
           <Link
-            to={link.route}
-            key={link.label}
-            className={` ${isActive && "bg-primary-500 rounded-xl"} flex-center flex-col gap-1 p-2 transition`}
-          >
-            <img
-              src={link.imgURL}
-              alt={link.label}
-              className={`group-hover:invert-white ${
-                isActive && "invert-white"
-                }`}
-              width={16}
-              height={16}
-            />
-            <p className="tiny-medium text-light-2">{link.label}</p>
-          </Link>
+  to={link.route}
+  key={link.label}
+  className={` ${isActive && "bg-black/10 rounded-xl"} invert-white flex-center flex-col gap-1  transition p-4`}
+>
+  <img
+    src={link.imgURL}
+    alt={link.label}
+    className={`group-hover:invert-white ${
+      isActive && "invert-white"
+    }`}
+    width={16}
+    height={16}
+  />
+ 
+</Link>
         );
       })}
     </section>

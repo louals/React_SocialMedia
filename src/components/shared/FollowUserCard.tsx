@@ -127,11 +127,6 @@ const FollowUserCard = ({
         >
           {isLoading ? (
             <span className="flex items-center gap-1">
-              <img 
-                src="/assets/icons/loader.svg" 
-                alt="loading" 
-                className={`${sizeConfig[size].loader} animate-spin`}
-              />
               {isFollowingUser ? "..." : "..."}
             </span>
           ) : isFollowingUser ? (
