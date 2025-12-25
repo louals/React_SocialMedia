@@ -14,13 +14,11 @@ const Home = () => {
   const {
     data: posts,
     isPending: isPostLoading,
-    isError: isErrorPosts,
   } = useGetRecentPosts();
 
   const {
     data: creators,
     isLoading: isUsersLoading,
-    isError: isErrorCreators,
   } = useGetUsers();
 
   // Filter to exclude current user and get 4-5 suggested users

@@ -33,9 +33,6 @@ const Explore = () => {
     );
 
   const shouldShowSearchResults = searchValue !== "";
-  const shouldShowPosts =
-    !shouldShowSearchResults &&
-    posts.pages.every((item) => item.documents.length === 0);
   return (
     <div className="explore-container">
       <div className="explore-inner_container">
@@ -72,7 +69,7 @@ const Explore = () => {
 
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
         {shouldShowSearchResults ? (
-          <SearchResults searchedPosts={searchedPosts} isSearchFetching={isSearchFetching} />
+          <SearchResults searchedPosts={searchedPosts?.documents ?? []} isSearchFetching={isSearchFetching} />
         ) : posts?.pages?.length > 0 &&
           posts.pages.some((item) => item.documents?.length > 0) ? (
           posts.pages.map((item, index) => (

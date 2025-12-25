@@ -16,7 +16,6 @@ import {
   useParams,
   useLocation,
 } from "react-router-dom";
-import LikedPosts from "./LikedPosts";
 import { useState } from "react";
 import FollowButton from "@/components/shared/FollowButton";
 
