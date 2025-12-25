@@ -3,6 +3,7 @@ import {
   useMutation,
   useQueryClient,
   useInfiniteQuery,
+  QueryFunctionContext,
 } from "@tanstack/react-query";
 import {
   createPost,
@@ -19,7 +20,6 @@ import {
   getPostById,
   getRecentPosts,
   getUserById,
-  getUserLikedPosts,
   getUsers,
   isFollowing,
   likePost,
@@ -33,6 +33,7 @@ import {
 } from "../appwrite/api";
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/Types";
 import { QUERY_KEYS } from "./queryKeys";
+import { Models } from "appwrite";
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -182,17 +183,18 @@ export const useDeletePost = () => {
 };
 
 export const useGetPosts = () => {
-  return useInfiniteQuery({
+  return useInfiniteQuery<Models.DocumentList<Models.Document>, Error>({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePosts,
+    queryFn: ({ pageParam }: QueryFunctionContext) =>
+      getInfinitePosts({ pageParam: pageParam as string | undefined }),
     getNextPageParam: (lastPage) => {
-      if (lastPage && lastPage.documents.length === 0) return null;
-
-      const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
-      return lastId;
+      if (!lastPage || lastPage.documents.length === 0) return undefined;
+      return lastPage.documents[lastPage.documents.length - 1].$id;
     },
+    initialPageParam: undefined, // 👈 this fixes the TS error
   });
 };
+
 
 
 export const useSearchPost = (searchTerm:string) => {

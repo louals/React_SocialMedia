@@ -1,8 +1,8 @@
-import { ID, Query, ImageGravity } from "appwrite";
+import { ID, Query} from "appwrite";
 
 import { INewUser, INewPost, IUpdatePost, IUpdateUser } from "@/Types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import { data } from "react-router-dom";
+
 
 export async function createUserAccount(user: INewUser) {
   try {
@@ -339,11 +339,11 @@ export async function deletePost(postId:string, imageId:string) {
 }
 
 
-export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10)]
+export async function getInfinitePosts({ pageParam }: { pageParam?: string }) {
+  const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10)];
   
   if (pageParam) {
-    queries.push(Query.cursorAfter(pageParam.toString()))
+    queries.push(Query.cursorAfter(pageParam)); // already a string
   }
 
   try {
@@ -351,15 +351,16 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
       queries
-    )
+    );
 
     if (!posts) {
-      throw Error;
+      throw new Error("No posts found");
     }
 
-    return posts
+    return posts;
   } catch (error) {
-    
+    console.error(error);
+    throw error;
   }
 }
 
