@@ -7,15 +7,12 @@ import {
   useIsFollowing, 
   useFollowUser, 
   useUnfollowUser,
-  useGetFollowersCount,
-  useGetFollowingCount
 } from "@/lib/react-query/queriesAndMutations";
 import Loader from "./Loader";
 
 type UserCardProps = {
   user: Models.Document;
   showFollowButton?: boolean;
-  showStats?: boolean;
   size?: "sm" | "md" | "lg";
   variant?: "default" | "compact" | "detailed";
 };
@@ -23,7 +20,6 @@ type UserCardProps = {
 const UserCard = ({ 
   user, 
   showFollowButton = true,
-  showStats = true,
   size = "md",
   variant = "default"
 }: UserCardProps) => {
@@ -35,9 +31,6 @@ const UserCard = ({
     user.$id
   );
   
-  // Fetch follower/following counts
-  const { data: followersCount } = useGetFollowersCount(user.$id);
-  const { data: followingCount } = useGetFollowingCount(user.$id);
   
   // Follow/Unfollow mutations
   const { mutateAsync: followUser, isPending: isFollowing } = useFollowUser();
