@@ -480,3 +480,303 @@ export async function updateUser(user: IUpdateUser) {
     console.log(error);
   }
 }
+
+// ============================== FOLLOW USER
+export async function followUser(followerId: string, followingId: string) {
+  try {
+    // Check if already following
+    const existingFollow = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      [
+        Query.equal("follower", followerId),
+        Query.equal("following", followingId)
+      ]
+    );
+
+    // If already following, don't create duplicate
+    if (existingFollow.documents.length > 0) {
+      return existingFollow.documents[0];
+    }
+
+    // Create follow document
+    const follow = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      ID.unique(),
+      {
+        follower: followerId,
+        following: followingId,
+        isMutual: false // Default to false, we'll update if mutual
+      }
+    );
+
+    // Check if it's mutual follow (the other person also follows back)
+    const mutualCheck = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      [
+        Query.equal("follower", followingId),
+        Query.equal("following", followerId)
+      ]
+    );
+
+    // If mutual follow exists, update both records
+    if (mutualCheck.documents.length > 0) {
+      // Update current follow to mutual
+      await databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.followsCollectionId,
+        follow.$id,
+        { isMutual: true }
+      );
+      
+      // Update the other follow to mutual
+      await databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.followsCollectionId,
+        mutualCheck.documents[0].$id,
+        { isMutual: true }
+      );
+    }
+
+    return follow;
+  } catch (error) {
+    console.log("Follow error:", error);
+    throw error;
+  }
+}
+
+// ============================== UNFOLLOW USER
+export async function unfollowUser(followerId: string, followingId: string) {
+  try {
+    // Find the follow document
+    const follows = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      [
+        Query.equal("follower", followerId),
+        Query.equal("following", followingId)
+      ]
+    );
+
+    if (follows.documents.length === 0) {
+      return { status: "not_following" };
+    }
+
+    const followId = follows.documents[0].$id;
+    
+    // Check if it was a mutual follow
+    const wasMutual = follows.documents[0].isMutual;
+
+    // Delete the follow document
+    await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      followId
+    );
+
+    // If it was mutual, update the other follow record
+    if (wasMutual) {
+      const otherFollow = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.followsCollectionId,
+        [
+          Query.equal("follower", followingId),
+          Query.equal("following", followerId)
+        ]
+      );
+
+      if (otherFollow.documents.length > 0) {
+        await databases.updateDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.followsCollectionId,
+          otherFollow.documents[0].$id,
+          { isMutual: false }
+        );
+      }
+    }
+
+    return { status: "ok" };
+  } catch (error) {
+    console.log("Unfollow error:", error);
+    throw error;
+  }
+}
+
+// ============================== CHECK IF FOLLOWING
+export async function isFollowing(followerId: string, followingId: string) {
+  try {
+    const follows = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      [
+        Query.equal("follower", followerId),
+        Query.equal("following", followingId)
+      ]
+    );
+
+    return {
+      isFollowing: follows.documents.length > 0,
+      followId: follows.documents[0]?.$id || null,
+      isMutual: follows.documents[0]?.isMutual || false
+    };
+  } catch (error) {
+    console.log("Error checking follow status:", error);
+    return { isFollowing: false, followId: null, isMutual: false };
+  }
+}
+
+// ============================== GET USER FOLLOWERS
+export async function getUserFollowers(userId: string) {
+  try {
+    const followers = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      [
+        Query.equal("following", userId), // People who follow this user
+        Query.orderDesc("$createdAt")
+      ]
+    );
+
+    return followers;
+  } catch (error) {
+    console.log("Error getting followers:", error);
+    return { documents: [], total: 0 };
+  }
+}
+
+// ============================== GET USER FOLLOWING
+export async function getUserFollowing(userId: string) {
+  try {
+    const following = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      [
+        Query.equal("follower", userId), // People this user follows
+        Query.orderDesc("$createdAt")
+      ]
+    );
+
+    return following;
+  } catch (error) {
+    console.log("Error getting following:", error);
+    return { documents: [], total: 0 };
+  }
+}
+
+// ============================== GET FOLLOWERS COUNT
+export async function getFollowersCount(userId: string) {
+  try {
+    const followers = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      [
+        Query.equal("following", userId),
+        Query.limit(1) // Just get count, not documents
+      ]
+    );
+
+    return followers.total;
+  } catch (error) {
+    console.log("Error getting followers count:", error);
+    return 0;
+  }
+}
+
+// ============================== GET FOLLOWING COUNT
+export async function getFollowingCount(userId: string) {
+  try {
+    const following = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      [
+        Query.equal("follower", userId),
+        Query.limit(1) // Just get count, not documents
+      ]
+    );
+
+    return following.total;
+  } catch (error) {
+    console.log("Error getting following count:", error);
+    return 0;
+  }
+}
+
+// ============================== GET FOLLOWERS WITH USER DETAILS
+export async function getFollowersWithDetails(userId: string) {
+  try {
+    const followers = await getUserFollowers(userId);
+    
+    // Get user details for each follower
+    const followersWithDetails = await Promise.all(
+      followers.documents.map(async (follow) => {
+        try {
+          const user = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            follow.follower
+          );
+          return {
+            ...follow,
+            userDetails: user
+          };
+        } catch (error) {
+          console.log(`Error fetching user ${follow.follower}:`, error);
+          return {
+            ...follow,
+            userDetails: null
+          };
+        }
+      })
+    );
+
+    return {
+      ...followers,
+      documents: followersWithDetails
+    };
+  } catch (error) {
+    console.log("Error getting followers with details:", error);
+    return { documents: [], total: 0 };
+  }
+}
+
+// ============================== GET FOLLOWING WITH USER DETAILS
+export async function getFollowingWithDetails(userId: string) {
+  try {
+    const following = await getUserFollowing(userId);
+    
+    // Get user details for each followed user
+    const followingWithDetails = await Promise.all(
+      following.documents.map(async (follow) => {
+        try {
+          const user = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            follow.following
+          );
+          return {
+            ...follow,
+            userDetails: user
+          };
+        } catch (error) {
+          console.log(`Error fetching user ${follow.following}:`, error);
+          return {
+            ...follow,
+            userDetails: null
+          };
+        }
+      })
+    );
+
+    return {
+      ...following,
+      documents: followingWithDetails
+    };
+  } catch (error) {
+    console.log("Error getting following with details:", error);
+    return { documents: [], total: 0 };
+  }
+}
+
+

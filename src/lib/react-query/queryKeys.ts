@@ -17,4 +17,14 @@ export enum QUERY_KEYS {
 
   //  SEARCH KEYS
   SEARCH_POSTS = "getSearchPosts",
+
+  // FOLLOW KEYS - Add these
+  GET_FOLLOWERS = "getFollowers",
+  GET_FOLLOWING = "getFollowing",
+  IS_FOLLOWING = "isFollowing",
+  GET_FOLLOWERS_COUNT = "getFollowersCount",
+  GET_FOLLOWING_COUNT = "getFollowingCount",
+  GET_FOLLOWERS_WITH_DETAILS = "getFollowersWithDetails",
+  GET_FOLLOWING_WITH_DETAILS = "getFollowingWithDetails",
+  GET_SUGGESTED_USERS = "getSuggestedUsers", // For "who to follow" suggestions
 }

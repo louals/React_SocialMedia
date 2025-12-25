@@ -9,17 +9,25 @@ import {
   createUserAccount,
   deletePost,
   deleteSavedPost,
+  followUser,
   getCurrentUser,
+  getFollowersCount,
+  getFollowersWithDetails,
+  getFollowingCount,
+  getFollowingWithDetails,
   getInfinitePosts,
   getPostById,
   getRecentPosts,
   getUserById,
+  getUserLikedPosts,
   getUsers,
+  isFollowing,
   likePost,
   savePost,
   SearchPosts,
   SignInAccount,
   signOutAccount,
+  unfollowUser,
   updatePost,
   updateUser,
 } from "../appwrite/api";
@@ -224,3 +232,104 @@ export const useUpdateUser = () => {
     },
   });
 };
+
+
+// Add these hooks:
+export const useFollowUser = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ followerId, followingId }: { 
+      followerId: string; 
+      followingId: string 
+    }) => followUser(followerId, followingId),
+    onSuccess: (_, variables) => {
+      // Invalidate all related queries
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.IS_FOLLOWING, variables.followerId, variables.followingId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWERS_COUNT, variables.followingId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWING_COUNT, variables.followerId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWERS_WITH_DETAILS, variables.followingId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWING_WITH_DETAILS, variables.followerId],
+      });
+    },
+  });
+};
+
+export const useUnfollowUser = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ followerId, followingId }: { 
+      followerId: string; 
+      followingId: string 
+    }) => unfollowUser(followerId, followingId),
+    onSuccess: (_, variables) => {
+      // Invalidate all related queries
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.IS_FOLLOWING, variables.followerId, variables.followingId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWERS_COUNT, variables.followingId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWING_COUNT, variables.followerId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWERS_WITH_DETAILS, variables.followingId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWING_WITH_DETAILS, variables.followerId],
+      });
+    },
+  });
+};
+
+export const useIsFollowing = (followerId: string, followingId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.IS_FOLLOWING, followerId, followingId],
+    queryFn: () => isFollowing(followerId, followingId),
+    enabled: !!followerId && !!followingId,
+  });
+};
+
+export const useGetFollowersCount = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_FOLLOWERS_COUNT, userId],
+    queryFn: () => getFollowersCount(userId),
+    enabled: !!userId,
+  });
+};
+
+export const useGetFollowingCount = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_FOLLOWING_COUNT, userId],
+    queryFn: () => getFollowingCount(userId),
+    enabled: !!userId,
+  });
+};
+
+export const useGetFollowersWithDetails = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_FOLLOWERS_WITH_DETAILS, userId],
+    queryFn: () => getFollowersWithDetails(userId),
+    enabled: !!userId,
+  });
+};
+
+export const useGetFollowingWithDetails = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_FOLLOWING_WITH_DETAILS, userId],
+    queryFn: () => getFollowingWithDetails(userId),
+    enabled: !!userId,
+  });
+};
+

@@ -223,7 +223,7 @@
   }
 
   .leftsidebar-link {
-    @apply rounded-xl base-medium hover:bg-primary-500 transition;
+    @apply rounded-full base-medium hover:bg-white/10 transition;
   }
 
   /* Post Card */
@@ -267,7 +267,7 @@
 
   /* Button */
   .shad-button_primary {
-    @apply bg-primary-500 rounded-xl  hover:bg-primary-500 text-light-1 flex gap-2 !important;
+    @apply bg-white text-dark-1 rounded-xl hover:bg-gray-200 flex gap-2 !important;
   }
 
   .shad-button_dark_4 {

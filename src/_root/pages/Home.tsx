@@ -51,31 +51,17 @@ const Home = () => {
       <div className="hidden lg:flex flex-col w-80 xl:w-96 px-6 py-8 border-l border-dark-4">
         <div className="sticky top-20 space-y-8">
           
-          {/* Current User Profile */}
-          <div className="flex items-center justify-between">
-            <Link to={`/profile/${currentUser.id}`} className="flex items-center gap-3 flex-1">
-              <img
-                src={currentUser.imageUrl || "/assets/icons/profile-placeholder.svg"}
-                alt="profile"
-                className="h-14 w-14 rounded-full object-cover border border-dark-4"
-              />
-              <div className="flex flex-col flex-1">
-                <p className="body-bold text-light-1">{currentUser.username}</p>
-                <p className="small-regular text-light-3">{currentUser.name}</p>
-              </div>
-            </Link>
-            <button className="text-primary-500 hover:text-primary-400 text-sm font-medium transition-colors">
-              Switch
-            </button>
-          </div>
+          
 
           {/* Suggestions For You */}
           <div>
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-light-2">Suggestions For You</h3>
+              <Link to="/all-users">
               <button className="text-xs text-light-1 hover:text-light-3 font-medium">
                 See All
               </button>
+              </Link>
             </div>
 
             {isUsersLoading ? (
