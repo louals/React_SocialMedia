@@ -79,7 +79,7 @@ const SignupForm = () => {
       <Form {...form}>
         <div className="flex flex-col items-center w-full">
           {/* Logo */}
-          <img src="/assets/images/logo.svg" alt="logo" className="w-32 mb-6" />
+          <img src="/assets/images/logo.png" alt="logo" className="w-32 mb-6" />
 
           {/* Header */}
           <div className="text-center mb-6">
