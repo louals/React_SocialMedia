@@ -51,7 +51,6 @@ const AllUsers = () => {
                   key={creator.$id} 
                   user={creator}
                   showFollowButton={true}
-                  showStats={true}
                   size="md"
                   variant="default"
                 />
