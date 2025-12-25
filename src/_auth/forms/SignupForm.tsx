@@ -75,126 +75,140 @@ const SignupForm = () => {
   const isLoading = isCreatingAccount || isSigningInUser || isUserLoading;
 
   return (
-    <div className="sm:w-420 flex-center flex-col p-8 sm:p-12 bg-black border border-zinc-800 rounded-2xl shadow-2xl">
-      <Form {...form}>
-        <div className="flex flex-col items-center w-full">
-          {/* Logo */}
-          <img src="/assets/images/logo.png" alt="logo" className="w-32 mb-6" />
-
-          {/* Header */}
-          <div className="text-center mb-6">
-            <h2 className="h3-bold md:h2-bold pt-5 sm:pt-0">Create an account</h2>
-            <p className="text-light-3 small-medium md:base-regular mt-2">
-              Join the community. Please enter your details.
-            </p>
-          </div>
-
-          <form
-            onSubmit={form.handleSubmit(handleSignup)}
-            className="flex flex-col gap-4 w-full"
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-zinc-400">Name</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="text" 
-                      className="shad-input bg-zinc-900 border-zinc-800 focus-visible:ring-1 focus-visible:ring-primary-500" 
-                      disabled={isLoading}
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red" />
-                </FormItem>
-              )}
+    <div className="flex-center flex-col w-full min-h-screen bg-black">
+      {/* Responsive Container:
+         - Mobile: Full width, no border, no rounding, vertical padding
+         - Desktop (sm+): 420px width, zinc border, rounded corners, shadow
+      */}
+      <div className="w-full sm:w-420 flex flex-col justify-center p-8 sm:p-12 
+                      bg-black sm:border sm:border-zinc-800 sm:rounded-3xl sm:shadow-2xl">
+        
+        <Form {...form}>
+          <div className="flex flex-col items-center w-full">
+            {/* Logo */}
+            <img 
+              src="/assets/images/logo.png" 
+              alt="logo" 
+              className="w-28 sm:w-32 mb-6" 
             />
 
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-zinc-400">Username</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="text" 
-                      className="shad-input bg-zinc-900 border-zinc-800 focus-visible:ring-1 focus-visible:ring-primary-500" 
-                      disabled={isLoading}
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red" />
-                </FormItem>
-              )}
-            />
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h2 className="h3-bold md:h2-bold text-white">
+                Create an account
+              </h2>
+              <p className="text-zinc-500 small-medium md:base-regular mt-2">
+                Join the community. Please enter your details.
+              </p>
+            </div>
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-zinc-400">Email</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="email" 
-                      className="shad-input bg-zinc-900 border-zinc-800 focus-visible:ring-1 focus-visible:ring-primary-500" 
-                      disabled={isLoading}
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red" />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-zinc-400">Password</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="password" 
-                      className="shad-input bg-zinc-900 border-zinc-800 focus-visible:ring-1 focus-visible:ring-primary-500" 
-                      disabled={isLoading}
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red" />
-                </FormItem>
-              )}
-            />
-
-            <Button 
-              type="submit" 
-              className="shad-button_primary w-full h-11 mt-2"
-              disabled={isLoading}
+            <form
+              onSubmit={form.handleSubmit(handleSignup)}
+              className="flex flex-col gap-5 w-full"
             >
-              {isLoading ? (
-                <div className="flex-center gap-2">
-                  <Loader /> Creating account...
-                </div>
-              ) : (
-                "Sign Up"
-              )}
-            </Button>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-zinc-400">Name</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="text" 
+                        className="shad-input bg-zinc-900 border-zinc-800 focus-visible:ring-1 focus-visible:ring-primary-500 h-11" 
+                        disabled={isLoading}
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red" />
+                  </FormItem>
+                )}
+              />
 
-            <p className="text-small-regular text-light-2 text-center mt-4">
-              Already have an account?
-              <Link
-                to="/sign-in"
-                className="text-primary-500 text-small-semibold ml-1 hover:underline"
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-zinc-400">Username</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="text" 
+                        className="shad-input bg-zinc-900 border-zinc-800 focus-visible:ring-1 focus-visible:ring-primary-500 h-11" 
+                        disabled={isLoading}
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-zinc-400">Email</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="email" 
+                        className="shad-input bg-zinc-900 border-zinc-800 focus-visible:ring-1 focus-visible:ring-primary-500 h-11" 
+                        disabled={isLoading}
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-zinc-400">Password</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="password" 
+                        className="shad-input bg-zinc-900 border-zinc-800 focus-visible:ring-1 focus-visible:ring-primary-500 h-11" 
+                        disabled={isLoading}
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red" />
+                  </FormItem>
+                )}
+              />
+
+              <Button 
+                type="submit" 
+                className="shad-button_primary w-full h-11 mt-2"
+                disabled={isLoading}
               >
-                Log in
-              </Link>
-            </p>
-          </form>
-        </div>
-      </Form>
+                {isLoading ? (
+                  <div className="flex-center gap-2">
+                    <Loader /> Creating account...
+                  </div>
+                ) : (
+                  "Sign Up"
+                )}
+              </Button>
+
+              <p className="text-small-regular text-light-2 text-center mt-4">
+                Already have an account?
+                <Link
+                  to="/sign-in"
+                  className="text-primary-500 text-small-semibold ml-1 hover:underline"
+                >
+                  Log in
+                </Link>
+              </p>
+            </form>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 };
