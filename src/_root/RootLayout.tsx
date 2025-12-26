@@ -19,6 +19,9 @@ const RootLayout = () => {
         </section>
       </main>
 
+      <br />
+      <br />
+      
       <BottomBar/>
     </div>
   )
