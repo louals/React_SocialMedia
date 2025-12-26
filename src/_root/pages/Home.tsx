@@ -48,8 +48,6 @@ const Home = () => {
       {/* Instagram-style Right Sidebar */}
       <div className="hidden lg:flex flex-col w-80 xl:w-96 px-6 py-8 border-l border-dark-4">
         <div className="sticky top-20 space-y-8">
-          
-          
 
           {/* Suggestions For You */}
           <div>

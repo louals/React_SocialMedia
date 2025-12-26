@@ -11,12 +11,18 @@ const RootLayout = () => {
     <div className='w-full md:flex'>
       <TopBar />
       <SideBar />
-      <section className='flex flex-1 h-full'>
-        <Outlet/>
-      </section>
+
+      {/* NEW WRAPPER TO OFFSET PAGES */}
+      <main className="flex-1 md:ml-[270px]">
+        <section className='flex flex-1 h-full'>
+          <Outlet/>
+        </section>
+      </main>
+
       <BottomBar/>
     </div>
   )
 }
+
 
 export default RootLayout

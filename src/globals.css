@@ -186,9 +186,24 @@
     @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
   }
 
-  /* Bottom bar */
   .bottom-bar {
-    @apply z-50 flex-between w-full sticky bottom-0 rounded-t-[20px] bg-dark-2 px-5 py-4 md:hidden;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    background: black;
+  }
+  
+  /* HIDE IT ON ANYTHING TABLET SIZE OR BIGGER */
+  @media (min-width: 640px) {
+    .bottom-bar {
+      display: none;
+    }
   }
 
   /* File uploader */
@@ -217,10 +232,15 @@
     @apply absolute bottom-0 p-5 flex-between w-full bg-gradient-to-t from-dark-3 to-transparent rounded-b-[24px] gap-2;
   }
 
-  /* Left sidebar */
   .leftsidebar {
     @apply hidden md:flex px-6 py-10 flex-col justify-between min-w-[270px] bg-dark-2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 50;
   }
+  
 
   .leftsidebar-link {
     @apply rounded-full base-medium hover:bg-white/10 transition;
