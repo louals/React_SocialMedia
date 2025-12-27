@@ -88,7 +88,7 @@ const FollowButton = ({ userId, className = "" }: FollowButtonProps) => {
       className={`${
         isFollowingState
           ? "bg-dark-4 text-light-2 hover:bg-dark-3 rounded-xl"
-          : "bg-primary-500 hover:bg-primary-600 text-light-1 rounded-xl"
+          : "bg-primary-500 hover:bg-primary-600 text-black rounded-xl"
       } ${className}`}
     >
       {isLoading || isFollowingPending || isUnfollowingPending ? (
